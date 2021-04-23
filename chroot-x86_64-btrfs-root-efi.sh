@@ -20,13 +20,13 @@ read RESPONSE
 [[ -z "$RESPONSE" ]] && RESPONSE=no
 if [ 'yes' == $RESPONSE ]
 then
-  echo 'Which IP address would you like to use: '
-  read STATICADDR
+    echo 'Which IP address would you like to use: '
+    read STATICADDR
 fi
 
-echo "127.0.0.1	localhost" > /etc/hosts
-echo "::1	localhost" >> /etc/hosts
-echo "$STATICADDR	$HOSTNAME.$DOMAINNAME	$HOSTNAME" >> /etc/hosts
+echo "127.0.0.1localhost" > /etc/hosts
+echo "::1localhost" >> /etc/hosts
+echo "$STATICADDR$HOSTNAME.$DOMAINNAME$HOSTNAME" >> /etc/hosts
 
 echo \n---\nNow time to set your root password: \n
 passwd

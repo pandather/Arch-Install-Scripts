@@ -83,10 +83,9 @@ echo Now verify your fstab (in nano!)
 
 nano /mnt/arch/etc/fstab
 
-cp ./chroot-x86_64-efi.sh /mnt/arch/startup.sh
-chmod 755 /mnt/arch/startup.sh
+cp ./chroot-x86_64-btrfs-root-efi.sh /mnt/arch/startup.sh
 
-arch-chroot /mnt/arch
+arch-chroot /mnt/arch /startup.sh
 
 umount -R /mnt/arch
 
@@ -96,3 +95,4 @@ if [ 'yes' == $RESPONSE ]
 then
   reboot
 fi
+
