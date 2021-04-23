@@ -83,7 +83,10 @@ echo Now verify your fstab (in nano!)
 
 nano /mnt/arch/etc/fstab
 
-cp ./chroot-x86_64-btrfs-root-efi.sh /mnt/arch/startup.sh
+echo '#!/bin/bash' > /mnt/arch/startup.sh
+echo "ESP=$ESP" >> /mnt/arch/startup.sh
+cat ./chroot-x86_64-btrfs-root-efi.sh >> /mnt/arch/startup.sh
+chmod 755 /mnt/arch/startup.sh
 
 arch-chroot /mnt/arch /startup.sh
 
