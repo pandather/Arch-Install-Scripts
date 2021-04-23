@@ -72,18 +72,19 @@ mount $ROOT /mnt/arch
 mkdir /mnt/arch/efi
 mount $ESP /mnt/arch/efi
 
-
 [[ -n "$BIOS" ] && [[ "$BIOS" == "EFI" ]] && pacstrap /mnt/arch base linux linux-firmware refind emacs
 else
     pacstrap /mnt/arch base linux linux-firmware grub emacs
 fi
 
-
-genfstab -U /mnt >> /mnt/arch/etc/fstab
+genfstab -U /mnt/arch >> /mnt/arch/etc/fstab
 
 echo Now verify your fstab (in nano!)
 
 nano /mnt/arch/etc/fstab
+
+cp ./chroot-x86_64-efi.sh /mnt/arch/startup.sh
+chmod 755 /mnt/arch/startup.sh
 
 arch-chroot /mnt/arch
 
