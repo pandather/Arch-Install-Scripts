@@ -32,7 +32,7 @@ echo I see these partitions:
 fdisk $ESPDISK -l
 echo 'Which partition is the ESP? (format `/dev/xxx#`): '
 read ESP
-[[ -z "$ROOT" ]] && exit
+[[ -z "$ESP" ]] && exit
 export ESP
 mkfs.fat -F32 $ESP
 
@@ -40,8 +40,10 @@ mkfs.fat -F32 $ESP
 echo "Want to create a swap partition?"
 echo '`no` means no, all else goes: '
 read RESPONSE
-if [ 'no' != $RESPONSE ]
+if [ 'yes' == "${RESPONSE:-no}" ]
 then
+  echo Okay.
+else
   lsblk
   echo 'Which disk would you like to use for swap? (format `/dev/xxx`, 512MiB+, blank if already partitioned): '
   read SWAPDISK
@@ -51,7 +53,7 @@ then
   fdisk $SWAPDISK -l
   echo 'Which partition is the swap? (format `/dev/xxx#`:) '
   read SWAP
-  [ -z "SWAP" ]] && exit
+  [[ -z "SWAP" ]] && exit
   mkswap $SWAP
   swapon $SWAP
 fi
@@ -72,14 +74,11 @@ mount $ROOT /mnt/arch
 mkdir /mnt/arch/efi
 mount $ESP /mnt/arch/efi
 
-[[ -n "$BIOS" ] && [[ "$BIOS" == "EFI" ]] && pacstrap /mnt/arch base linux linux-firmware refind emacs
-else
-    pacstrap /mnt/arch base linux linux-firmware grub emacs
-fi
+[[ -n "$BIOS" ]] && [[ "${BIOS:-MBR}" == "EFI" ]] && pacstrap /mnt/arch base linux linux-firmware refind emacs
 
 genfstab -U /mnt/arch >> /mnt/arch/etc/fstab
 
-echo Now verify your fstab (in nano!)
+echo 'Now verify your fstab (in nano!)'
 
 nano /mnt/arch/etc/fstab
 
@@ -94,7 +93,7 @@ umount -R /mnt/arch
 
 echo 'bootable install created, want to reboot? [`yes` else exits]'
 read RESPONSE
-if [ 'yes' == $RESPONSE ]
+if [ 'yes' == "${RESPONSE:-no}" ]
 then
   reboot
 fi
